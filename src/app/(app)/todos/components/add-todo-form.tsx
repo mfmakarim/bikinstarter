@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,6 +35,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function AddTodoForm() {
   const [open, setOpen] = useState(false);
+  const [state, formAction, isPending] = useActionState(createTodo, null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -79,7 +80,7 @@ export default function AddTodoForm() {
           <DialogTitle>Add New Todo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(formAction)} className="space-y-4">
             <FormField
               control={form.control}
               name="title"
@@ -112,7 +113,7 @@ export default function AddTodoForm() {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting || isPending}
               >
                 {form.formState.isSubmitting ? "Creating..." : "Create Todo"}
               </Button>
