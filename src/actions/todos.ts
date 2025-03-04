@@ -29,13 +29,6 @@ export const getTodos = async () => {
   }
 }
 
-export const create = async (prevState: any, formData:FormData) => {
-  console.log({
-    prevState,
-    formData
-  })
-}
-
 export const createTodo = async (formData: FormData) => {
   try {
     const user = await checkAuthAndGetUser();
